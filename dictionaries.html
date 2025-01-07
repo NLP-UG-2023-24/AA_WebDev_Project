@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dictionary App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #0073e6;
+      color: white;
+      padding: 1em 0;
+    }
+    main {
+      padding: 2em;
+    }
+    input, button {
+      padding: 0.5em;
+      font-size: 1em;
+      margin: 0.5em;
+    }
+    #results {
+      margin-top: 2em;
+      text-align: left;
+      padding: 1em;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      display: inline-block;
+      width: 80%;
+    }
+    .api-header {
+      font-weight: bold;
+      margin-top: 1em;
+      color: #0073e6;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dictionary App</h1>
+  </header>
+  <main>
+    <p>Enter a word to get its meaning:</p>
+    <input type="text" id="wordInput" placeholder="Enter word">
+    <button id="getDefinition">Get Definition</button>
+    <div id="results"></div>
+  </main>
+  <script>
+    const merriamApiKey = "YOUR_MERRIAM_WEBSTER_API_KEY"; // Replace with your Merriam-Webster API key
+    const resultsDiv = document.getElementById("results");
+    const wordInput = document.getElementById("wordInput");
+    const getDefinitionButton = document.getElementById("getDefinition");
+
+    const displayError = (apiName, errorMessage) => {
+      resultsDiv.innerHTML += `<p class="api-header">${apiName}:</p><p style="color: red;">Error: ${errorMessage}</p>`;
+    };
+
+    const displayDefinition = (apiName, definition) => {
+      resultsDiv.innerHTML += `<p class="api-header">${apiName}:</p><p>${definition}</p>`;
+    };
+
+    const fetchMerriamWebster = (word) => {
+      fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${merriamApiKey}`)
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0 && data[0].shortdef) {
+            displayDefinition("Merriam-Webster", data[0].shortdef.join("; "));
+          } else {
+            displayError("Merriam-Webster", "No definition found.");
+          }
+        })
+        .catch(error => displayError("Merriam-Webster", error.message));
+    };
+
+    const fetchFreeDictionaryAPI = (word) => {
+      fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data) && data[0].meanings) {
+            const definitions = data[0].meanings.map(meaning => meaning.definitions[0].definition).join("; ");
+            displayDefinition("Free Dictionary API", definitions);
+          } else {
+            displayError("Free Dictionary API", "No definition found.");
+          }
+        })
+        .catch(error => displayError("Free Dictionary API", error.message));
+    };
+
+    const fetchDatamuseAPI = (word) => {
+      fetch(`https://api.datamuse.com/words?sp=${word}`)
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            displayDefinition("Datamuse API (Similar Words)", data.map(entry => entry.word).join(", "));
+          } else {
+            displayError("Datamuse API", "No similar words found.");
+          }
+        })
+        .catch(error => displayError("Datamuse API", error.message));
+    };
+
+    getDefinitionButton.addEventListener("click", () => {
+      const word = wordInput.value.trim();
+      resultsDiv.innerHTML = ""; // Clear previous results
+      if (word) {
+        fetchMerriamWebster(word);
+        fetchFreeDictionaryAPI(word);
+        fetchDatamuseAPI(word);
+      } else {
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a word.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
