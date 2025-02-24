@@ -45,3 +45,12 @@ main {
 .dictionary h3 {
     margin-top: 0;
 }
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #B2AC88;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
