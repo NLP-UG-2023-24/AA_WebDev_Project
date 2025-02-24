@@ -6,24 +6,28 @@ body {
     color: #333;
     position: relative;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
-
     background-color: #accaa1;
-
     color: white;
     padding: 1rem 2rem;
+    width: 100%;
     text-align: center;
+    box-sizing: border-box;
 }
 
 main {
     padding: 2rem;
-    padding-bottom: 100px;
+    flex: 1;
+    box-sizing: border-box;
 }
+
 .search-box {
     margin-bottom: 2rem;
-    text-align:center;
+    text-align: center;
 }
 
 .search-box input {
@@ -33,11 +37,13 @@ main {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
 .results {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 }
+
 .dictionary {
     flex: 1 1;
     background-color: white;
@@ -45,20 +51,23 @@ main {
     border-radius: 5px;
     padding: 1rem;
 }
+
 .dictionary h3 {
     margin-top: 0;
 }
+
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #B2AC88;
+    background-color: #accaa1;
     color: white;
     text-align: center;
     padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
 }
+
 .footer-links {
-    margin-top: 5px;
+    display: inline;
 }
 
 .footer-links a {
