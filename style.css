@@ -4,6 +4,8 @@ body {
     padding: 0;
     background-color: #f4f4f9;
     color: #333;
+    position: relative;
+    min-height: 100vh;
 }
 
 header {
@@ -17,6 +19,7 @@ header {
 
 main {
     padding: 2rem;
+    padding-bottom: 100px;
 }
 .search-box {
     margin-bottom: 2rem;
@@ -53,4 +56,16 @@ main {
     color: white;
     text-align: center;
     padding: 10px;
+}
+.footer-links {
+    margin-top: 5px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
 }
