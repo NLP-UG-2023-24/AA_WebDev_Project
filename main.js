@@ -177,8 +177,14 @@ clearButton.addEventListener('click', function () {
 document.getElementById('book-button').addEventListener('click', () => {
     const book = document.createElement('div');
     book.classList.add('falling-book');
-    book.textContent = ['📚','📓','📔','📒','📕','📗','📘','📙','📖'];
+
+    const emojis = ['📚','📓','📔','📒','📕','📗','📘','📙','📖'];
+    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+    book.textContent = randomEmoji;
+
+    book.style.position = 'absolute';
     book.style.left = Math.random() * 100 + 'vw';
+    book.style.top = '0';
     book.style.animationDuration = (Math.random() * 2 + 3) + 's';
 
     document.body.appendChild(book);
