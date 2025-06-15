@@ -26,6 +26,12 @@ var searchButton = document.getElementById('search-button');
 var clearButton = document.getElementById('clear-button');
 var wordInput = document.getElementById('word-input');
 
+wordInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        searchButton.click();
+    }
+});
+
 searchButton.addEventListener('click', function () {
     var word = wordInput.value.trim();
     if (word === '') {
@@ -171,8 +177,7 @@ clearButton.addEventListener('click', function () {
 document.getElementById('book-button').addEventListener('click', () => {
     const book = document.createElement('div');
     book.classList.add('falling-book');
-    const bookEmojis = ['📚', '📓', '📔', '📒', '📕', '📗', '📘', '📙', '📖'];
-    book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
+    book.textContent = ['📚','📓','📔','📒','📕','📗','📘','📙','📖'];
     book.style.left = Math.random() * 100 + 'vw';
     book.style.animationDuration = (Math.random() * 2 + 3) + 's';
 
