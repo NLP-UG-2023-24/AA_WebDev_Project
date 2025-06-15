@@ -336,4 +336,36 @@ body.dark-mode .author-card a {
 }
 
 
+#book-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: none;
+    color: rgba(255, 255, 255, 0.6); /* przezroczysty biały tekst */
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: color 0.2s ease;
+}
 
+#book-button:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+
+.falling-book {
+    position: fixed;
+    top: -50px;
+    font-size: 2rem;
+    animation: fall linear forwards;
+    z-index: 999;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(120vh);
+        opacity: 0;
+    }
+}
