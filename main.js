@@ -183,3 +183,11 @@ document.getElementById('book-button').addEventListener('click', () => {
     }, 5000);
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("searchForm");
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    performSearch(); 
+  });
+});
