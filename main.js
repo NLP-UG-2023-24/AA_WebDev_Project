@@ -168,3 +168,18 @@ clearButton.addEventListener('click', function () {
         dict.querySelector('p').textContent = '';
     });
 });
+document.getElementById('book-button').addEventListener('click', () => {
+    const book = document.createElement('div');
+    book.classList.add('falling-book');
+    const bookEmojis = ['📚', '📓', '📔', '📒', '📕', '📗', '📘', '📙', '📖'];
+    book.textContent = bookEmojis[Math.floor(Math.random() * bookEmojis.length)];
+    book.style.left = Math.random() * 100 + 'vw';
+    book.style.animationDuration = (Math.random() * 2 + 3) + 's';
+
+    document.body.appendChild(book);
+
+    setTimeout(() => {
+        book.remove();
+    }, 5000);
+});
+
