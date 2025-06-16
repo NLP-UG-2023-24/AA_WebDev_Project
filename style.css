@@ -145,13 +145,25 @@ main {
 }
 
 .footer {
+    position: relative;
     background-color: #accaa1;
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 10px 20px;
     width: 100%;
     box-sizing: border-box;
     margin: 0;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer p {
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+    padding: 0 60px;
 }
 
 .footer-links {
@@ -167,8 +179,8 @@ main {
     text-decoration: underline;
 }
 .switch {
-    position: fixed;
-    bottom: 20px;
+    position: absolute;
+    bottom: 15px;
     right: 20px;
     display: inline-block;
     width: 60px;
@@ -343,23 +355,34 @@ body.dark-mode .author-card a {
     color: #a5d6a7;
 }
 
-
 #book-button {
-    position: fixed;
-    bottom: 20px;
+    position: absolute;
     left: 20px;
+    bottom: 10px;
     background: none;
-    color: rgba(255, 255, 255, 0.6); /* przezroczysty biały tekst */
+    color: #2c5f2d;
     border: none;
     font-weight: bold;
     font-size: 1rem;
     cursor: pointer;
     z-index: 1000;
     transition: color 0.2s ease;
+    opacity: 0.7;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 #book-button:hover {
-    color: rgba(255, 255, 255, 1);
+    opacity: 1;
+    background-color: rgba(172, 202, 161, 0.3);
+}
+
+body.dark-mode #book-button {
+    color: #a5d6a7;
+}
+
+body.dark-mode #book-button:hover {
+    background-color: rgba(165, 214, 167, 0.2);
 }
 
 
@@ -373,7 +396,7 @@ body.dark-mode .author-card a {
 
 @keyframes fall {
     to {
-        transform: translateY(120vh);
+        transform: translateY(calc(100vh - 50px));
         opacity: 0;
     }
 }
@@ -424,4 +447,11 @@ body.dark-mode .word-of-the-day {
 
 body.dark-mode #wotd-word {
     color: #a5d6a7;
+}
+body.dark-mode #wotd-learn-more {
+    background-color: #a5d6a7;
+    color: #1f1f1f;
+}
+body.dark-mode #wotd-learn-more:hover {
+    background-color: #81c784;
 }
