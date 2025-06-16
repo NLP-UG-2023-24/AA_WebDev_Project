@@ -14,12 +14,6 @@ if (toggle) {
     });
 }
 
-function updateDict(index, text) {
-    const dict = document.querySelectorAll('.dictionary')[index];
-    if (dict) {
-        dict.querySelector('p').textContent = text;
-    }
-}
 
 const apiKey = 'gqsv9riz53v4hn1jhyv41at2xcmyj8n18z5ia6j7d9z87p2sh'; 
 const searchButton = document.getElementById('search-button');
@@ -32,17 +26,23 @@ wordInput.addEventListener('keydown', function(event) {
     }
 });
 
+function updateDictContent(index, content, isHtml = false) {
+    const dict = document.querySelectorAll('.dictionary')[index];
+    if (dict) {
+        const paragraph = dict.querySelector('p');
+        if (isHtml) {
+            paragraph.innerHTML = content;
+        } else {
+            paragraph.textContent = content;
+        }
+    }
+}
 searchButton.addEventListener('click', function () {
     const word = wordInput.value.trim();
     if (word === '') {
         alert('Please enter a word!');
         return;
     }
-wordInput.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    searchButton.click();
-  }
-});
 
     
     const definitionUrl = `https://api.wordnik.com/v4/word.json/${word}/definitions?limit=1&includeRelated=false&useCanonical=false&includeTags=false&api_key=${apiKey}`;
@@ -52,64 +52,58 @@ wordInput.addEventListener('keydown', function(event) {
             if (!response.ok) throw new Error('Definition API failed');
             return response.json();
         })
-        .then(function (data) {
-            const dict1 = document.querySelectorAll('.dictionary')[0];
-            const paragraph = dict1.querySelector('p');
-
+         .then(data => {
             if (data.length > 0) {
-                paragraph.textContent = data[0].text;
+                updateDictContent(0, data[0].text);
             } else {
-                paragraph.textContent = 'No definition found.';
+                updateDictContent(0, 'No definition found.');
             }
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error(error);
-            const dict1 = document.querySelectorAll('.dictionary')[0];
-            dict1.querySelector('p').textContent = 'Error fetching definition.';
+            updateDictContent(0, 'Error fetching definition.');
         });
 
 
     const etymologyUrl = `https://api.wordnik.com/v4/word.json/${word}/etymologies?api_key=${apiKey}`;
 
-    fetch(etymologyUrl)
-        .then(function (response) {
-            if (!response.ok) throw new Error('Etymology API failed');
-            return response.json();
-        })
-        .then(function (data) {
-            const dict2 = document.querySelectorAll('.dictionary')[1];
-            const paragraph = dict2.querySelector('p');
+   fetch(etymologyUrl)
+    .then(function (response) {
+        if (!response.ok) throw new Error('Etymology API failed');
+        return response.json();
+    })
+    .then(data => {
+        if (data.length > 0) {
+            const rawEtymology = data[0];
+            const cleanEtymology = rawEtymology.replace(/<[^>]*>/g, '');
+            const finalEtymology = cleanEtymology.trim();
 
-            if (data.length > 0) {
-                paragraph.innerHTML = data[0]; 
-            } else {
-                paragraph.textContent = 'No etymology found.';
-            }
-        })
-        .catch(function (error) {
-            console.error(error);
-            const dict2 = document.querySelectorAll('.dictionary')[1];
-            dict2.querySelector('p').textContent = 'Error fetching etymology.';
-        });
+            updateDictContent(1, finalEtymology);
+
+        } else {
+            updateDictContent(1, 'No etymology found.');
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        updateDictContent(1, 'Error fetching etymology.');
+    });
+
 
 
     const synonymUrl = `https://api.wordnik.com/v4/word.json/${word}/relatedWords?useCanonical=false&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${apiKey}`;
     fetch(synonymUrl)
         .then(res => res.json())
         .then(data => {
-            const dict3 = document.querySelectorAll('.dictionary')[2];
-            const paragraph = dict3.querySelector('p');
-
-            if (data.length > 0 && data[0].words && data[0].words.length > 0) {
-                paragraph.textContent = data[0].words.join(', ');
+           if (data.length > 0 && data[0].words && data[0].words.length > 0) {
+                updateDictContent(2, data[0].words.join(', '));
             } else {
-                paragraph.textContent = 'No synonyms found.';
+                updateDictContent(2, 'No synonyms found.');
             }
         })
         .catch(err => {
             console.error(err);
-            const dict3 = document.querySelectorAll('.dictionary')[2];
-            dict3.querySelector('p').textContent = 'Error fetching synonyms.';
+            updateDictContent(2, 'Error fetching synonyms.');
         });
 
     
@@ -120,24 +114,15 @@ fetch(`https://api.wordnik.com/v4/word.json/${word}/examples?limit=3&api_key=${a
      
       const cleanExamples = data.examples.map(e => {
         
-        return '• ' + e.text.replace(/_(.*?)_/g, '<em>$1</em>');
+        return e.text.replace(/_(.*?)_/g, '<em>$1</em>');
       });
       
-      updateDictHTML(3, cleanExamples.join('<br><br>'));
-    } else {
-      updateDict(3, 'No examples found.');
-    }
-  })
-  .catch(() => updateDict(3, 'Error fetching examples.'));
-
-
-function updateDictHTML(index, html) {
-  const dict = document.querySelectorAll('.dictionary')[index];
-  if (dict) {
-    dict.querySelector('p').innerHTML = html;
-  }
-}
-
+      updateDictContent(3, cleanExamples.join('<br><br>'), true); 
+            } else {
+                updateDictContent(3, 'No examples found.');
+            }
+        })
+        .catch(() => updateDictContent(3, 'Error fetching examples.'));
  
   fetch(`https://api.wordnik.com/v4/word.json/${word}/pronunciations?limit=10&useCanonical=false&api_key=${apiKey}`)
   .then(res => res.json())
@@ -147,25 +132,39 @@ function updateDictHTML(index, html) {
     if (ipaProns.length) {
      
       const prons = ipaProns.map(p => p.raw).join(', ');
-      updateDict(4, prons);
+      updateDictContent(4, prons);
     } else {
-      updateDict(4, 'No IPA pronunciation found.');
+      updateDictContent(4, 'No IPA pronunciation found.');
     }
   })
-  .catch(() => updateDict(4, 'Error fetching pronunciation.'));
+  .catch(() => updateDictContent(4, 'Error fetching pronunciation.'));
   
-  fetch(`https://api.wordnik.com/v4/word.json/${word}/frequency?useCanonical=false&startYear=1800&endYear=2020&api_key=${apiKey}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.totalCount) {
-        
-        updateDict(5, `Total occurrences: ${data.totalCount}`);
-      } else {
-        updateDict(5, 'No frequency data found.');
-      }
-    })
-    .catch(() => updateDict(5, 'Error fetching frequency.'));
-});
+ 
+    fetch(`https://api.wordnik.com/v4/word.json/${word}/phrases?limit=8&useCanonical=false&api_key=${apiKey}`)
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Phrases API failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+            
+            if (data && data.length > 0) {
+                const phrasesText = data.map(function(phrase) {
+                    return `${phrase.gram1 || ''} ${phrase.gram2 || ''}`.trim();
+                }).join('\n');
+                updateDictContent(5, phrasesText);
+            } else {
+                updateDictContent(5, 'No common phrases found.');
+            }
+        })
+        .catch(function (error) {
+            console.error(error);
+            updateDictContent(5, 'Error fetching phrases.');
+        });
+
+    });
+   
 
 clearButton.addEventListener('click', function () {
     wordInput.value = '';
