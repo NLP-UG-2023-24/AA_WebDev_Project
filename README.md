@@ -10,7 +10,7 @@ Our aim was to build an educational tool that highlights how different dictionar
 
 ## 🚀 How to Use
 
-1. Open `index.html` in a web browser.
+1. Open `index.html` in a web browser or use the url https://tinyurl.com/linguistichelper.
 2. Type in any English word.
 3. Click **Search** to view definitions from various dictionaries.
 4. Explore the "About Authors" and "About Website" sections for more context.
