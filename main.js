@@ -194,3 +194,27 @@ document.getElementById('book-button').addEventListener('click', () => {
     }, 5000);
 });
 
+function fetchWordOfTheDay() {
+    const wotdUrl = `https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key=${apiKey}`;
+    
+    fetch(wotdUrl)
+        .then(response => response.json())
+        .then(data => {
+            const word = data.word;
+            const definition = data.definitions[0]?.text || "No definition available.";
+            
+            document.getElementById('wotd-word').textContent = word;
+            document.getElementById('wotd-definition').textContent = definition;
+            
+            document.getElementById('wotd-learn-more').addEventListener('click', () => {
+                wordInput.value = word;
+                searchButton.click();
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching word of the day:', error);
+            document.getElementById('wotd-word').textContent = "Error";
+            document.getElementById('wotd-definition').textContent = "Failed to load word of the day.";
+        });
+}
+document.addEventListener('DOMContentLoaded', fetchWordOfTheDay);
