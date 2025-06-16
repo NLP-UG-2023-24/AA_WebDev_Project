@@ -8,7 +8,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Merged height property */
 }
 h1, h2, h3, h4, h5, h6 {
     color: #2c5f2d;
@@ -44,14 +43,12 @@ button {
 button:hover {
     background-color: #1e4720;
     transform: scale(1.05);
-    transition: transform 0.2s ease;
 }
 
 .back-link {
-    position: absolute;
+    position: relative;
     top: 1rem;
     right: 1rem;
-    font-size: 0.9rem;
     text-decoration: none;
     color: #2c5f2d;
     font-weight: bold;
@@ -62,7 +59,8 @@ button:hover {
     border-radius: 5px;
     font-size: 0.95rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 1rem 0 0 1rem;
+    margin: 10px 0 0 0;
+    text-align: center;
 }
 
 .back-link:hover {
@@ -141,7 +139,6 @@ main {
 
 .dictionary h3 {
     margin-top: 0;
-    color: #2c5f2d;
 }
 
 .footer {
@@ -382,7 +379,7 @@ body.dark-mode #book-button {
 }
 
 body.dark-mode #book-button:hover {
-    background-color: rgba(165, 214, 167, 0.2);
+    background-color: #a5d6a733;
 }
 
 
@@ -454,4 +451,72 @@ body.dark-mode #wotd-learn-more {
 }
 body.dark-mode #wotd-learn-more:hover {
     background-color: #81c784;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 1.5rem 1rem;
+  }
+  
+  .site-title {
+    font-size: 1.7rem;
+    padding-bottom: 0.3rem;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .header-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .back-link {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: 0.5rem 0;
+    display: block;
+    text-align: center;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .footer p {
+    padding: 0;
+    order: 2;
+  }
+  
+  #book-button {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    order: 1;
+    margin: 0 auto;
+  }
+  
+  .switch {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin: 0 auto;
+    order: 3;
+  }
+  
+  .search-box input {
+    width: 100%;
+  }
+  
+  .dictionary {
+    flex: 100%;
+  }
+  
+  .word-of-the-day {
+    padding: 1rem;
+  }
 }
