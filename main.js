@@ -53,16 +53,21 @@ searchButton.addEventListener('click', function () {
             return response.json();
         })
          .then(data => {
-            if (data.length > 0) {
-                updateDictContent(0, data[0].text);
-            } else {
-                updateDictContent(0, 'No definition found.');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            updateDictContent(0, 'Error fetching definition.');
-        });
+        if (data.length > 0) {
+            const rawDefinition = data[0].text;
+
+            const cleanDefinition = rawDefinition.replace(/<[^>]*>/g, '');
+
+            updateDictContent(0, cleanDefinition);
+
+        } else {
+            updateDictContent(0, 'No definition found.');
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        updateDictContent(0, 'Error fetching definition.');
+    });
 
 
     const etymologyUrl = `https://api.wordnik.com/v4/word.json/${word}/etymologies?api_key=${apiKey}`;
